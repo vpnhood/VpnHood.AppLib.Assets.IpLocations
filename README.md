@@ -18,8 +18,3 @@ If you use this package in your project, you must acknowledge IP2Location LITE a
 This nuget uses the IP2Location LITE database for [IP geolocation](https://lite.ip2location.com)."
 For more details, visit [IP2Location LITE License](https://lite.ip2location.com).
 
-## Installation
-Install via NuGet:
-
-```sh
-dotnet add package VpnHood.AppLib.Assets.IpLocations

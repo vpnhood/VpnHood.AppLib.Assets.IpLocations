@@ -1,6 +1,11 @@
-                  GNU LESSER GENERAL PUBLIC LICENSE
-                       Version 2.1, February 1999
+                 GNU LESSER GENERAL PUBLIC LICENSE
+                    Version 2.1, February 1999
 
+This package is licensed under the GNU Lesser General Public License (LGPL) v3.0.  
+However, this license has additional terms regarding using IP geolocation data from **IP2Location LITE**.  
+See the **"ADDITIONAL LICENSE TERMS"** section below.
+
+--------------------------------------------------------------------------------
  Copyright (C) 1991, 1999 Free Software Foundation, Inc.
  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  Everyone is permitted to copy and distribute verbatim copies
@@ -502,3 +507,16 @@ necessary.  Here is a sample; alter the names:
   Ty Coon, President of Vice
 
 That's all there is to it!
+
+--------------------------------------------------------------------------------
+
+ADDITIONAL LICENSE TERMS
+Data Source
+This package includes IP geolocation data from IP2Location LITE.
+IP2Location LITE is Copyright (c) 2001-2024 Hexasoft Development Sdn. Bhd. All Rights Reserved.
+
+License & Attribution
+This package requires attribution as per IP2Location LITE’s license.
+If you use this package in your project, you must acknowledge IP2Location LITE as follows:
+
+This nuget uses the IP2Location LITE database for IP geolocation." For more details, visit IP2Location LITE License.
