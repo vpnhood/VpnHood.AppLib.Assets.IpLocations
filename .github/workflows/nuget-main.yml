@@ -41,4 +41,4 @@ jobs:
       run: dotnet pack $PROJECT_NAME --configuration $BUILD_CONFIG -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
 
     - name: Publish
-      run: dotnet nuget push "**/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key ${{secrets.NUGET_API_KEY_ADS}}
+      run: dotnet nuget push "**/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key ${{secrets.NUGET_API_KEY}}
