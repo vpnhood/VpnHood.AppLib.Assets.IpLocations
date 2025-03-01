@@ -18,18 +18,28 @@
 		<Company>OmegaHood LLC</Company>
 		<Copyright>© OmegaHood LLC. All rights reserved.</Copyright>
 		<PackageIcon>VpnHood.png</PackageIcon>
-		<PackageProjectUrl>https://github.com/vpnhood/vpnhood</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/vpnhood/vpnhood</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/vpnhood/VpnHood.AppLib.Assets.IpLocations</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/vpnhood/VpnHood.AppLib.Assets.IpLocations</RepositoryUrl>
 		<Version>6.0.668</Version>
 		<FileVersion>$([System.DateTime]::Now.ToString("yyyy.M.d.HHmm"))</FileVersion>
+		<PackageTags>IP Geolocation, IP2Location, VPN, Country Detection</PackageTags>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\..\..\VpnHood.png" Link="Resources\VpnHood.png">
+		<None Include="..\VpnHood.png" Link="Resources\VpnHood.png">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
 		</None>
 	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\LICENSE" Link="Licenses\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+
 
 	<ItemGroup>
 		<Compile Update="Resources.Designer.cs">
