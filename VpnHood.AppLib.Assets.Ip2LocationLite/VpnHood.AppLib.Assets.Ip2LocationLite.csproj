@@ -23,7 +23,7 @@
 		<FileVersion>$([System.DateTime]::Now.ToString("yyyy.M.d.HHmm"))</FileVersion>
 		<PackageTags>IP Geolocation, IP2Location, VPN, Country Detection</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<PackageReadmeFile>README</PackageReadmeFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		</PropertyGroup>
 
 	<ItemGroup>
