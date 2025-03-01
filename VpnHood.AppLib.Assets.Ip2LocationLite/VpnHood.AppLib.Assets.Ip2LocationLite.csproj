@@ -23,7 +23,8 @@
 		<FileVersion>$([System.DateTime]::Now.ToString("yyyy.M.d.HHmm"))</FileVersion>
 		<PackageTags>IP Geolocation, IP2Location, VPN, Country Detection</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-	</PropertyGroup>
+		<PackageReadmeFile>README</PackageReadmeFile>
+		</PropertyGroup>
 
 	<ItemGroup>
 		<None Include="..\VpnHood.png" Link="Resources\VpnHood.png">
@@ -34,6 +35,13 @@
 
 	<ItemGroup>
 		<None Include="..\LICENSE" Link="Licenses\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md" Link="Licenses\README.md">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
 		</None>
