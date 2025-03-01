@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace VpnHood.AppLib.Assets.IpLocations {
+namespace VpnHood.AppLib.Assets.Ip2LocationLite {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace VpnHood.AppLib.Assets.IpLocations {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("VpnHood.AppLib.Assets.IpLocations.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("VpnHood.AppLib.Assets.Ip2LocationLite.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
