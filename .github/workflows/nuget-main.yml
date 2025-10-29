@@ -34,17 +34,18 @@ jobs:
           $newVersion = [version]::new($version.Major, $version.Minor, ($version.Build +1))
           $versionNode.InnerText = $newVersion.ToString(3)
           $xml.Save($projectFile)
-          Write-Host "Version bumped to: $($newVersion.ToString(3))"
+          return $newVersion.ToString(3)
         }
 
         $projectFile = Join-Path $env:GITHUB_WORKSPACE "$env:PROJECT_NAME/$env:PROJECT_NAME.csproj"
         Write-Host "Updating version in: $projectFile"
-        Update-ProjectVersion $projectFile
+        $bumpedVersion = Update-ProjectVersion $projectFile
+        Write-Host "Version bumped to: $bumpedVersion"
 
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git add -A
-        git commit -m "chore: bump version [skip ci]"
+        git commit -m "chore: bump version $bumpedVersion"
         git push
 
     - name: Setup .NET
