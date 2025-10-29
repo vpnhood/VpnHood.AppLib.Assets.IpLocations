@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BUILD_CONFIG: 'Release'
-      PROJECT_NAME: 'VpnHood.AppLib.Assets.Ip2LocationLite'
 
     steps:
     - name: Checkout
@@ -43,7 +42,7 @@ jobs:
           [xml]$xml = Get-Content $proj.FullName
           $versionNode = $xml.SelectSingleNode("Project/PropertyGroup/Version")
           if ($null -eq $versionNode) { throw "Version node not found or invalid format in project file: $($proj.FullName)" }
-          $versionNode.InnerText = $pub.Version
+          $versionNode.InnerText = $pub.Version.ToString(3)
           $xml.Save($proj.FullName)
         }
 
@@ -60,13 +59,13 @@ jobs:
         dotnet-version: 9.0.x
 
     - name: Restore dependencies
-      run: dotnet restore $PROJECT_NAME
+      run: dotnet restore
 
     - name: Build Solution
-      run: dotnet build $PROJECT_NAME --no-restore --configuration $BUILD_CONFIG
+      run: dotnet build --no-restore --configuration $BUILD_CONFIG
 
     - name: Pack All Projects
-      run: dotnet pack $PROJECT_NAME --configuration $BUILD_CONFIG -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+      run: dotnet pack --configuration $BUILD_CONFIG -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
 
     - name: Publish
       run: dotnet nuget push "**/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key ${{ secrets.NUGET_API_KEY }}
