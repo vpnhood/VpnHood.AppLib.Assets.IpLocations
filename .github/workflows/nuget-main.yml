@@ -42,7 +42,7 @@ jobs:
           [xml]$xml = Get-Content $proj.FullName
           $versionNode = $xml.SelectSingleNode("Project/PropertyGroup/Version")
           if ($null -eq $versionNode) { throw "Version node not found or invalid format in project file: $($proj.FullName)" }
-          $versionNode.InnerText = $pub.Version.ToString(3)
+          $versionNode.InnerText = $pub.Version
           $xml.Save($proj.FullName)
         }
 
