@@ -1,9 +1,29 @@
 ﻿$SoultionDir = Split-Path -Parent $PSScriptRoot
 $ProjectDir = $PSScriptRoot
-$ProjectFile = Path.Combine($ProjectDir, 'VpnHood.AppLib.Assets.Ip2LocationLite.csproj')
-echo "Publishing project file: $ProjectFile"
-exits
+$ProjectFile = join-Path $ProjectDir "VpnHood.AppLib.Assets.Ip2LocationLite.csproj"
 
+# extract version amd increment its build number then save it back to the project file
+Function UpdateProjectVersion([string] $projectFile) 
+{
+	[xml]$xml = Get-Content $projectFile
+	$versionNode = $xml.SelectSingleNode("Project/PropertyGroup/Version");
+	if ($versionNode -eq $null) {
+		throw "Version node not found or invalid format in project file."
+	}
+
+	# parse version using version class
+	$version = [System.Version]::Parse($versionNode.InnerText)
+		
+	# increment build number
+	$newVersion = New-Object System.Version($version.Major, $version.Minor, ($version.Build + 1))
+	
+	$versionNode.InnerText = $newVersion.ToString(3)
+	$xml.Save($projectFile)
+}
+
+# Increase Version
+Write-Host "Increase Version"
+UpdateProjectVersion $ProjectFile
 
 # Common git directory/work-tree arguments
 $GitDirArgs = @('--git-dir', "$SoultionDir/.git", '--work-tree', $SoultionDir)
@@ -12,25 +32,3 @@ $GitDirArgs = @('--git-dir', "$SoultionDir/.git", '--work-tree', $SoultionDir)
 git $GitDirArgs commit -a -m Publish
 git $GitDirArgs pull
 git $GitDirArgs push
-
-# extract version amd increment its build number then save it back to the project file
-Function UpdateProjectVersion([string] $projectFile) 
-{
-	[xml]$xml = Get-Content $projectFile
-	$versionNode = $xml.SelectSingleNode("Project/PropertyGroup/Version");
-	if ($versionNode -ne $null) 
-	{
-		$versionParts = $versionNode.InnerText.Split('.')
-		if ($versionParts.Length -eq 4) 
-		{
-			$buildNumber = [int]$versionParts[2]
-			$buildNumber++
-			$versionParts[2] = $buildNumber.ToString()
-			$newVersion = $versionParts -join '.'
-			$versionNode.InnerText = $newVersion
-			$xml.Save($projectFile)
-			return $newVersion
-		}
-	}
-	return $null
-}
