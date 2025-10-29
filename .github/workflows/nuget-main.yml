@@ -13,65 +13,46 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-        BUILD_CONFIG: 'Release'
-        PROJECT_NAME: 'VpnHood.AppLib.Assets.Ip2LocationLite'
+      BUILD_CONFIG: 'Release'
+      PROJECT_NAME: 'VpnHood.AppLib.Assets.Ip2LocationLite'
 
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    
+      with:
+        fetch-depth: 0
+        persist-credentials: true
+
     - name: Bump version and push
       if: github.event_name == 'push'
       shell: pwsh
       run: |
-        function Update-ProjectVersion([string] $projectFile) {
-          [xml]$xml = Get-Content $projectFile
-          $versionNode = $xml.SelectSingleNode("Project/PropertyGroup/Version")
-          if ($null -eq $versionNode) {
-            throw "Version node not found or invalid format in project file: $projectFile"
-          }
-          $version = [version]::Parse($versionNode.InnerText)
-          $newVersion = [version]::new($version.Major, $version.Minor, ($version.Build +1))
-          $versionNode.InnerText = $newVersion.ToString(3)
-          $xml.Save($projectFile)
-          return $newVersion.ToString(3)
-        }
+        #1) Read PubVersion.json, increment build, and save
+        $pubVersionFile = Join-Path $env:GITHUB_WORKSPACE 'PubVersion.json'
+        $pub = Get-Content $pubVersionFile -Raw | ConvertFrom-Json
+        $v = [version]::Parse($pub.Version)
+        $newV = [version]::new($v.Major, $v.Minor, ($v.Build + 1))
+        $pub.Version = $newV.ToString(3)
+        $pub | ConvertTo-Json -Depth 5 | Set-Content -Path $pubVersionFile -Encoding UTF8
+        Write-Host "New version: $($pub.Version)"
 
-        # Find all C# project files
+        #2) Apply this version to all C# project files
         $csprojFiles = Get-ChildItem -Path $env:GITHUB_WORKSPACE -Recurse -Filter *.csproj -File
-        if (-not $csprojFiles) {
-          Write-Host "No .csproj files found."
-          exit 0
-        }
-
-        $bumped = @()
         foreach ($proj in $csprojFiles) {
-            Write-Host "Bumping version in: $($proj.FullName)"
-            $v = Update-ProjectVersion $proj.FullName
-            $bumped += [pscustomobject]@{ Path = $proj.FullName; Version = $v }
+          Write-Host "Setting version $($pub.Version) in: $($proj.FullName)"
+          [xml]$xml = Get-Content $proj.FullName
+          $versionNode = $xml.SelectSingleNode("Project/PropertyGroup/Version")
+          if ($null -eq $versionNode) { throw "Version node not found or invalid format in project file: $($proj.FullName)" }
+          $versionNode.InnerText = $pub.Version
+          $xml.Save($proj.FullName)
         }
 
-        if (-not $bumped) {
-          Write-Host "No versions bumped."
-          exit 0
-        }
-
-        $uniqueVersions = $bumped.Version | Sort-Object -Unique
-        if ($uniqueVersions.Count -eq 1) { $commitMsg = "chore: bump version $($uniqueVersions[0])" }
-        else { $commitMsg = "chore: bump versions" }
-
+        #3) Commit and push using the version from PubVersion.json
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git add -A
-
-        $changes = git status --porcelain
-        if ($changes) {
-          git commit -m "$commitMsg"
-          git pull --ff-only
-          git push
-        } else {
-          Write-Host "No changes to commit"
-        }
+        git commit -m "chore: bump version $($pub.Version)"
+        git push
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -88,4 +69,4 @@ jobs:
       run: dotnet pack $PROJECT_NAME --configuration $BUILD_CONFIG -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
 
     - name: Publish
-      run: dotnet nuget push "**/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key ${{secrets.NUGET_API_KEY}}
+      run: dotnet nuget push "**/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key ${{ secrets.NUGET_API_KEY }}
