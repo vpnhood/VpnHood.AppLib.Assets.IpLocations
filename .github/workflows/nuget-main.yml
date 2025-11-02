@@ -39,7 +39,9 @@ jobs:
         $csprojFiles = Get-ChildItem -Path $env:GITHUB_WORKSPACE -Recurse -Filter *.csproj -File
         foreach ($proj in $csprojFiles) {
           Write-Host "Setting version $($pub.Version) in: $($proj.FullName)"
-          [xml]$xml = Get-Content $proj.FullName
+          $xml = New-Object XML
+          $xml.PreserveWhitespace = $true
+          $xml.Load($proj.FullName)
           $versionNode = $xml.SelectSingleNode("Project/PropertyGroup/Version")
           if ($null -eq $versionNode) { throw "Version node not found or invalid format in project file: $($proj.FullName)" }
           $versionNode.InnerText = $pub.Version
