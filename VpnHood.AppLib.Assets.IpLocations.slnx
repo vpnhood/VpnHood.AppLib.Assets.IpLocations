@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/.github/" />
+  <Folder Name="/.github/workflows/">
+    <File Path=".github/workflows/nuget-main.yml" />
+  </Folder>
+  <Folder Name="/Pub/">
+    <File Path="Pub/PubVersion.json" />
+  </Folder>
+  <Project Path="VpnHood.AppLib.Assets.Ip2LocationLite/VpnHood.AppLib.Assets.Ip2LocationLite.csproj" />
+</Solution>
